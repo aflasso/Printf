@@ -7,12 +7,8 @@
  */
 int _printf(const char *format, ...)
 {
-	char in[11];
-	int x;
-	int i;
-	int c;
 	int p = 0;
-	char *s;
+
 	va_list arguments;
 
 	va_start(arguments, format);
@@ -27,54 +23,64 @@ int _printf(const char *format, ...)
 		}
 		if (format[p] == '%')
 		{
-			if (format[p + 1] == 's')
-			{
-				s = va_arg(arguments, char *);
-				write(1, s, strlen(s));
-				p++;
-			}
-			if (format[p + 1] == 'c')
-			{
-				c = va_arg(arguments, int);
-				write(1, &c, 1);
-				p++;
-			}
-			if (format[p + 1] == 'd')
-			{
-				i = va_arg(arguments, int);
-				x = conv(i, in);
-				write(1, in, x);
-				p++;
-			}
-			if (format[p + 1] == 'i')
-			{
-				i = (int) va_arg(arguments, int);
-				x = conv(i, in);
-				write(1, in, x);
-				p++;
-			}
-			if (format[p + 1] == '%')
-			{
-				case_porc('%');
-				p++;
-
-			}
-			if (format[p + 1] == 'u')
-			{
-				p++;
-			}
-			else
-			{
-				p++;
-
-			}
+			
 
 		}
-
-
 	}
 	va_end(arguments);
 	return (p);
+}
+
+int (*get_format_func(char *s))(va_list)
+{
+	
+}
+
+void case_s(va_list a)
+{
+	char *s;
+
+	s = va_arg(a, char *);
+	write(1, s, strlen(s));
+}
+
+void case_c(va_list a)
+{
+	int c;
+
+	c = va_arg(a, int);
+	write(1, &c, 1);
+}
+
+void case_d(va_list a)
+{
+	int d;
+	int x;
+	char in[11];
+
+	d = va_arg(a, int);
+	x = conv(d, in);
+	write(1, in, x);
+}
+
+void case_i(va_list a)
+{
+	int d;
+	int x;
+	int in[11];
+
+	d = va_arg(a, int);
+	x = conv(d,in);
+	write(1, in, x);
+}
+
+/**
+ * case_porc - print with format %%.
+ * @porcnt: the porcent character
+ */
+void case_porc(char porcnt)
+{
+	write(1, &porcnt, 1);
 }
 
 /**
@@ -143,13 +149,4 @@ void reverse(char *str, int len)
 		p++;
 		final--;
 	}
-}
-
-/**
- * case_porc - print with format %%.
- * @porcnt: the porcent character
- */
-void case_porc(char porcnt)
-{
-	write(1, &porcnt, 1);
 }
